@@ -75,6 +75,37 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Scroll Reveal Logic
+    const revealElements = document.querySelectorAll('.reveal-text, .welcome-divider');
+    const observerOptions = {
+        threshold: 0.15
+    };
+
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, observerOptions);
+
+    revealElements.forEach(el => revealObserver.observe(el));
+
+    // Navbar scroll interaction
+    window.addEventListener('scroll', () => {
+        if (document.body.classList.contains('gallery-open')) {
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(12, 12, 14, 0.8)';
+                navbar.style.backdropFilter = 'blur(10px)';
+                navbar.style.padding = '1.5rem 5vw';
+            } else {
+                navbar.style.background = 'transparent';
+                navbar.style.backdropFilter = 'none';
+                navbar.style.padding = '2.5rem 5vw';
+            }
+        }
+    });
+
     function isInViewport(element) {
         const rect = element.getBoundingClientRect();
         return (

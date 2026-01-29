@@ -105,6 +105,7 @@
       -webkit-text-fill-color: transparent;
       font-weight: 700;
       text-decoration: none;
+      user-select: none;
     }
 
     .nav-links {
@@ -167,6 +168,58 @@
       transform: translateY(20px);
       transition: opacity 1s ease, transform 1s ease;
       transition-delay: 0.5s;
+    }
+
+    /* Exploring Welcome Section */
+    #exploring-welcome {
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 10vw;
+    }
+
+    .reveal-text {
+      font-family: var(--font-display);
+      font-size: 4rem;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    #exploring-welcome p.reveal-text {
+      font-family: var(--font-main);
+      font-size: 1.4rem;
+      -webkit-text-fill-color: var(--text-secondary);
+      max-width: 600px;
+      margin-top: 2rem;
+    }
+
+    .welcome-divider {
+      width: 0;
+      height: 2px;
+      background: var(--gradient);
+      margin: 2rem 0;
+      transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .reveal-text.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .welcome-divider.visible {
+      width: 150px;
+    }
+
+    .delay-1 {
+      transition-delay: 0.3s;
     }
 
     .gallery-header {
