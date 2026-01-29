@@ -3,14 +3,53 @@ document.addEventListener('DOMContentLoaded', () => {
     const entranceBtn = document.querySelector('.entrance-btn');
     const entranceTitle = document.querySelector('.entrance-title');
 
+    const entranceNote = document.querySelector('.entrance-note');
+    const navbar = document.querySelector('.navbar');
+
     // Entrance Animations
+    setTimeout(() => {
+        if (navbar) navbar.classList.add('fade-in');
+    }, 200);
+
     setTimeout(() => {
         entranceTitle.classList.add('fade-in');
     }, 500);
 
     setTimeout(() => {
+        if (entranceNote) entranceNote.classList.add('fade-in');
+    }, 800);
+
+    setTimeout(() => {
         entranceBtn.classList.add('fade-in');
-    }, 1000);
+    }, 1200);
+
+    // Special Interaction: Magnetic Effect & Depth
+    const magneticElements = [entranceBtn, document.querySelector('.logo-text'), entranceTitle];
+
+    magneticElements.forEach(el => {
+        if (!el) return;
+        el.addEventListener('mousemove', (e) => {
+            const rect = el.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+
+            const multiplier = el === entranceTitle ? 0.15 : 0.35;
+            el.style.transform = `translate(${x * multiplier}px, ${y * multiplier}px)`;
+
+            if (el === entranceBtn) {
+                el.style.boxShadow = `${-x * 0.1}px ${-y * 0.1}px 30px rgba(99, 102, 241, 0.5)`;
+            }
+            if (el === entranceTitle) {
+                el.style.textShadow = `${-x * 0.05}px ${-y * 0.05}px 15px rgba(255, 255, 255, 0.2)`;
+            }
+        });
+
+        el.addEventListener('mouseleave', () => {
+            el.style.transform = `translate(0px, 0px)`;
+            el.style.boxShadow = '';
+            el.style.textShadow = '';
+        });
+    });
 
     // Unlock Interaction
     entranceBtn.addEventListener('click', () => {
