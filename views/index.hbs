@@ -54,5 +54,44 @@
                 <a href="#" class="card-link">Access Files</a>
             </div>
         </div>
+
+
+        <div class="nav-card-protected" style="--accent: #f59e0b;">
+            <div class="card-image">
+                <img src="/images/two.png" alt="Protected Vault">
+                <div class="lock-overlay">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                </div>
+            </div>
+            <div class="card-content">
+                <h3>Protected</h3>
+                <p>Secure vault for proprietary assets and confidential digital blueprints.</p>
+                <a href="/downloads" class="card-link protected-link">Access Vault</a>
+            </div>
+        </div>
     </div>
 </main>
+
+<!-- Vault Password Modal -->
+<div id="vault-modal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            <h3>Security Verification</h3>
+        </div>
+        <p>Accessing the Protected Vault requires decryption key.</p>
+        <div class="modal-input-group">
+            <input type="password" id="vault-password" placeholder="Enter Decryption Key" autocomplete="off">
+            <button id="vault-submit">Decrypt</button>
+        </div>
+        <button id="modal-close">Cancel</button>
+    </div>
+</div>

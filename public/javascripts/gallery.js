@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 200);
 
     setTimeout(() => {
-        entranceTitle.classList.add('fade-in');
+        if (entranceTitle) entranceTitle.classList.add('fade-in');
     }, 500);
 
     setTimeout(() => {
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 800);
 
     setTimeout(() => {
-        entranceBtn.classList.add('fade-in');
+        if (entranceBtn) entranceBtn.classList.add('fade-in');
     }, 1200);
 
     // Special Interaction: Magnetic Effect & Depth
@@ -52,17 +52,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Unlock Interaction
-    entranceBtn.addEventListener('click', () => {
-        document.body.classList.add('gallery-open');
+    if (entranceBtn) {
+        entranceBtn.addEventListener('click', () => {
+            document.body.classList.add('gallery-open');
 
-        // Remove entrance from DOM after transition
-        setTimeout(() => {
-            entrance.style.display = 'none';
-        }, 1200);
-    });
+            // Remove entrance from DOM after transition
+            setTimeout(() => {
+                entrance.style.display = 'none';
+            }, 1200);
+        });
+    }
 
     // Parallax effect for cards
-    const items = document.querySelectorAll('.nav-card');
+    const items = document.querySelectorAll('.nav-card, .nav-card-protected');
     window.addEventListener('mousemove', (e) => {
         const x = (e.clientX / window.innerWidth - 0.5) * 20;
         const y = (e.clientY / window.innerHeight - 0.5) * 20;
@@ -90,6 +92,65 @@ document.addEventListener('DOMContentLoaded', () => {
     }, observerOptions);
 
     revealElements.forEach(el => revealObserver.observe(el));
+
+    // Protected Card Interaction (Password Vault)
+    const protectedLink = document.querySelector('.protected-link');
+    const vaultModal = document.getElementById('vault-modal');
+    const vaultInput = document.getElementById('vault-password');
+    const vaultSubmit = document.getElementById('vault-submit');
+    const modalClose = document.getElementById('modal-close');
+
+    // Direct Access Protection
+    if (window.location.pathname === '/downloads') {
+        if (!localStorage.getItem('vault_unlocked')) {
+            window.location.href = '/';
+        }
+    }
+
+    if (protectedLink && vaultModal) {
+        protectedLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            vaultModal.classList.add('active');
+            setTimeout(() => vaultInput.focus(), 500);
+        });
+
+        const closeVault = () => {
+            vaultModal.classList.remove('active');
+            vaultInput.value = '';
+            vaultInput.classList.remove('input-error');
+        };
+
+        modalClose.addEventListener('click', closeVault);
+
+        vaultSubmit.addEventListener('click', () => {
+            const password = vaultInput.value;
+            // The secret key
+            if (password === 'igallery2026') {
+                vaultSubmit.textContent = 'DECRYPTING...';
+                vaultSubmit.style.background = '#10b981';
+
+                // Set unlock flag
+                localStorage.setItem('vault_unlocked', 'true');
+                document.cookie = "vault_unlocked=true; path=/; max-age=3600"; // 1 hour session
+
+                setTimeout(() => {
+                    window.location.href = '/downloads';
+                }, 1000);
+            } else {
+                vaultInput.classList.add('input-error');
+                setTimeout(() => vaultInput.classList.remove('input-error'), 500);
+            }
+        });
+
+        vaultInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') vaultSubmit.click();
+        });
+
+        // Close on backdrop click
+        vaultModal.addEventListener('click', (e) => {
+            if (e.target === vaultModal) closeVault();
+        });
+    }
 
     // Navbar scroll interaction
     window.addEventListener('scroll', () => {
