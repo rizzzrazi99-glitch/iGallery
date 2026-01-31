@@ -1,0 +1,155 @@
+<head>
+    <style>
+        .contributors-header {
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+        }
+
+        .contributors-header h1 {
+            font-size: 4rem;
+            color: white;
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 1rem;
+        }
+
+        .contributors-header p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contributors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .contributor-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contributor-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #6366f1, #a855f7);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .contributor-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .contributor-card:hover::before {
+            opacity: 1;
+        }
+
+        .contributor-name {
+            font-size: 1.5rem;
+            color: white;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .contributor-username {
+            font-size: 0.9rem;
+            color: #6366f1;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .contributor-bio {
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .contributor-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .github-link {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            transition: opacity 0.2s ease;
+        }
+
+        .github-link:hover {
+            opacity: 1;
+        }
+
+        .joined-date {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+
+<main style="background-color: #0c0c0e; min-height: 100vh;">
+    <header class="contributors-header">
+        <h1>Contributors</h1>
+        <p>The amazing people who make iGallery possible. Join them today.</p>
+    </header>
+
+    <div class="contributors-grid">
+        {{#each contributors}}
+        <div class="contributor-card">
+            {{#if this.image}}
+            <div
+                style="width: 80px; height: 80px; margin-bottom: 1.5rem; border-radius: 50%; overflow: hidden; border: 2px solid #6366f1;">
+                <img src="{{this.image}}" alt="{{this.name}}" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            {{else}}
+            <div
+                style="width: 80px; height: 80px; margin-bottom: 1.5rem; border-radius: 50%; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; border: 1px dashed rgba(255,255,255,0.2);">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </div>
+            {{/if}}
+
+            <h3 class="contributor-name">{{this.name}}</h3>
+            <span class="contributor-username">@{{this.username}}</span>
+
+            <div
+                style="display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; font-size: 0.8rem; color: rgba(255,255,255,0.4);">
+                {{#if this.age}}<span>{{this.age}} years</span>{{/if}}
+                {{#if this.profession}}<span>• {{this.profession}}</span>{{/if}}
+                {{#if this.place}}<span>• {{this.place}}</span>{{/if}}
+            </div>
+
+            <p class="contributor-bio">{{this.bio}}</p>
+            <div class="contributor-footer">
+                <span class="joined-date">Joined {{this.joinedAt}}</span>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</main>

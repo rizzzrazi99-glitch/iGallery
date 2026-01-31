@@ -128,6 +128,24 @@
       color: white;
     }
 
+    .nav-link {
+      transition: all 0.3s ease;
+    }
+
+    .join-btn {
+      padding: 0.8rem 2rem;
+      background: var(--accent-1);
+      color: white !important;
+      border-radius: 50px;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+    }
+
+    .join-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
+      filter: brightness(1.1);
+    }
+
     .entrance-note {
       font-size: 1.1rem;
       color: var(--text-secondary);

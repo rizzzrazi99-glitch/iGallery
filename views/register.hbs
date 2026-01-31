@@ -1,0 +1,136 @@
+<head>
+    <style>
+        .register-container {
+            max-width: 600px;
+            margin: 6rem auto;
+            padding: 3rem;
+            background: rgba(26, 26, 28, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .form-header h2 {
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 0.5rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .form-header p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 1.1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #6366f1;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: #6366f1;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+        }
+
+        .submit-btn:hover {
+            filter: brightness(1.2);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+        }
+    </style>
+</head>
+
+<main style="background-color: #0c0c0e; min-height: 100vh; overflow: hidden;">
+    <div class="register-container">
+        <div class="form-header">
+            <h2>Join the Gallery</h2>
+            <p>Become a part of our creative community.</p>
+        </div>
+
+        <form action="/members/register" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required placeholder="John Doe">
+            </div>
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required placeholder="johndoe123">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required placeholder="john@example.com">
+            </div>
+
+            <div class="form-group">
+                <label for="image">Profile Image</label>
+                <input type="file" id="image" name="image" accept="image/*">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="age">Age</label>
+                    <input type="number" id="age" name="age" placeholder="25">
+                </div>
+                <div class="form-group">
+                    <label for="place">Place</label>
+                    <input type="text" id="place" name="place" placeholder="New York, USA">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="profession">Profession</label>
+                <input type="text" id="profession" name="profession" placeholder="Software Engineer">
+            </div>
+
+            <div class="form-group">
+                <label for="bio">Bio</label>
+                <textarea id="bio" name="bio" rows="3" placeholder="Tell us about yourself..."></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">Register Now</button>
+        </form>
+    </div>
+</main>
