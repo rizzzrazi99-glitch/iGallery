@@ -1,238 +1,10 @@
+<head>
+    <link rel="stylesheet" href="/stylesheets/os.css">
+</head>
+
 <main id="gallery-container"
     style="opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; background-color: #0c0c0e;">
-    <style>
-        .os-layout {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 4rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding-top: 2rem;
-        }
 
-        /* Sidebar Navigation */
-        .os-sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
-        }
-
-        .os-nav-item {
-            display: flex;
-            align-items: center;
-            gap: 1.2rem;
-            padding: 1.2rem;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .os-nav-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-            transform: translateX(5px);
-        }
-
-        .os-nav-item.active {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: var(--os-accent, #6366f1);
-            color: white;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .os-nav-icon {
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .os-nav-icon svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        .os-nav-name {
-            font-weight: 600;
-            font-size: 1rem;
-        }
-
-        /* Dynamic Content Area */
-        .os-content {
-            min-height: 500px;
-        }
-
-        .kali-installer-container {
-            max-width: 100%;
-            padding-top: 0;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.5s ease;
-        }
-
-        .kali-installer-container.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Existing Styles Overrides/Fixes */
-        .arch-selector {
-            display: flex;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 12px;
-            padding: 0.5rem;
-            gap: 0.5rem;
-            margin-bottom: 3rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .arch-btn {
-            flex: 1;
-            padding: 1rem;
-            background: transparent;
-            border: none;
-            color: rgba(255, 255, 255, 0.6);
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.2rem;
-        }
-
-        .arch-btn span {
-            font-size: 0.65rem;
-            opacity: 0.6;
-        }
-
-        .arch-btn:hover {
-            color: white;
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .arch-btn.active {
-            background: rgba(99, 102, 241, 0.2);
-            color: white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        .kali-installer-card {
-            background: #1a1a1c;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 3rem;
-            transition: transform 0.4s ease, border-color 0.4s ease;
-        }
-
-        .kali-installer-card:hover {
-            border-color: var(--os-accent, #6366f1);
-            transform: translateY(-5px);
-        }
-
-        .installer-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 2rem;
-        }
-
-        .version-tag {
-            font-size: 0.75rem;
-            font-weight: 800;
-            color: var(--os-accent, #6366f1);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-
-        .installer-info h3 {
-            font-size: 2.2rem;
-            color: white;
-            margin: 0;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .installer-icon svg {
-            width: 60px;
-            height: 60px;
-            color: var(--os-accent, #6366f1);
-            opacity: 0.8;
-        }
-
-        .installer-card-body p {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin-bottom: 3rem;
-            max-width: 500px;
-        }
-
-        .installer-card-footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .kali-btn-download {
-            display: inline-flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1.2rem 3rem;
-            background: var(--os-accent, #6366f1);
-            color: white;
-            text-decoration: none;
-            border-radius: 12px;
-            font-weight: 700;
-            transition: all 0.3s ease;
-        }
-
-        .kali-btn-download:hover {
-            filter: brightness(1.2);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-        }
-
-        .secondary-actions {
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        .action-item {
-            color: rgba(255, 255, 255, 0.6);
-            transition: all 0.2s ease;
-        }
-
-        .action-item:hover {
-            color: white;
-            transform: scale(1.1);
-        }
-
-        @media (max-width: 900px) {
-            .os-layout {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-
-            .os-sidebar {
-                flex-direction: row;
-                overflow-x: auto;
-                padding-bottom: 1rem;
-            }
-
-            .os-nav-item {
-                flex-shrink: 0;
-            }
-        }
-    </style>
 
     <header class="gallery-header">
         <h2 class="reveal-text visible">Operating Systems</h2>
@@ -268,6 +40,18 @@
                     <div class="installer-card-body">
                         <p id="os-description">Complete offline installer with everything you need for a fresh start.
                         </p>
+
+                        <!-- Credentials Section -->
+                        <div id="os-credentials" class="os-credentials" style="display: none;">
+                            <div class="credential-item">
+                                <span class="cred-label">Default User:</span>
+                                <span id="cred-user" class="cred-value"></span>
+                            </div>
+                            <div class="credential-item">
+                                <span class="cred-label">Password:</span>
+                                <span id="cred-password" class="cred-value"></span>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="installer-card-footer">
@@ -320,6 +104,9 @@
         const osIcon = document.getElementById('os-icon');
         const osDownloadBtn = document.getElementById('os-download-btn');
         const mainContainer = document.getElementById('gallery-container');
+        const osCredentials = document.getElementById('os-credentials');
+        const credUser = document.getElementById('cred-user');
+        const credPassword = document.getElementById('cred-password');
 
         let currentOS = 'kali';
 
@@ -357,6 +144,15 @@
                 osVersion.textContent = 'Version ' + data.version;
                 osDescription.textContent = data.description;
                 osIcon.innerHTML = data.icon;
+
+                // Update Credentials
+                if (data.user && data.password) {
+                    credUser.textContent = data.user;
+                    credPassword.textContent = data.password;
+                    osCredentials.style.display = 'flex';
+                } else {
+                    osCredentials.style.display = 'none';
+                }
 
                 // Update Arches
                 archSelector.innerHTML = '';
