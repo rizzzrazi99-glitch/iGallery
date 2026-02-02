@@ -40,12 +40,13 @@ router.post('/register', (req, res) => {
     console.log('[REGISTRATION] Received request body:', req.body);
 
     upload.single('image')(req, res, async function (err) {
-        let imagePath = null;
+        let imagePath = req.body.imageUrl || null;
+
         if (err) {
             console.error('[REGISTRATION] Multer Error:', err);
             // If it's a read-only filesystem (Vercel), log it and proceed without an image
             if (err.code === 'EROFS' || err.message.includes('read-only')) {
-                console.warn('[REGISTRATION] Target directory is read-only. Proceeding without image.');
+                console.warn('[REGISTRATION] Target directory is read-only. Using URL if provided.');
             } else {
                 return res.status(500).send(`Upload Error (${err.code || 'UNKNOWN'}): ${err.message}`);
             }
@@ -53,8 +54,6 @@ router.post('/register', (req, res) => {
             if (req.file) {
                 imagePath = '/user-images/' + req.file.filename;
                 console.log('[REGISTRATION] Image uploaded to:', imagePath);
-            } else {
-                console.log('[REGISTRATION] No image file provided.');
             }
         }
 

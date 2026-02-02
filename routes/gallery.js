@@ -43,22 +43,31 @@ router.get('/', async (req, res) => {
 router.post('/upload', (req, res) => {
     // Attempting to upload image and diagnostic logging enabled
     upload.single('image')(req, res, async function (err) {
+        let imagePath = req.body.imageUrl || null;
+
         if (err) {
             console.error('Gallery Multer Error:', err);
             // Gracefully handle read-only filesystem on Vercel
             if (err.code === 'EROFS' || err.message.includes('read-only')) {
-                console.warn('Gallery directory is read-only. Upload failed but proceeding with log.');
-                // For gallery, we really NEED an image, but we shouldn't crash.
-                // We'll return a 400 instead of 500 with a clear message.
-                return res.status(400).send('Upload Error: This platform does not support local storage. Please use a cloud-hosted image URL or contact site admin.');
+                console.warn('Gallery directory is read-only. Using URL if provided.');
+                if (!imagePath) {
+                    return res.status(400).send('Upload Error: This platform does not support local storage. Please provide an **Image URL** instead.');
+                }
+            } else {
+                return res.status(500).send(`Upload Error (${err.code || 'UNKNOWN'}): ${err.message}`);
             }
-            return res.status(500).send(`Upload Error (${err.code || 'UNKNOWN'}): ${err.message}`);
         }
 
         try {
             const { title, description } = req.body;
-            if (!req.file) {
-                return res.status(400).send('Please upload an image');
+
+            // If multer succeeded and we have a file, override imagePath
+            if (req.file) {
+                imagePath = '/gallery-images/' + req.file.filename;
+            }
+
+            if (!imagePath) {
+                return res.status(400).send('Please upload an image file or provide an Image URL');
             }
 
             const newItem = new GalleryItem({

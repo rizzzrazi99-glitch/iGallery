@@ -165,10 +165,20 @@
                 <textarea name="description" rows="3"
                     style="width: 100%; padding: 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white;"></textarea>
             </div>
-            <div class="form-group" style="margin-bottom: 2rem;">
-                <label style="display: block; color: rgba(255,255,255,0.7); margin-bottom: 0.5rem;">Image File</label>
-                <input type="file" name="image" accept="image/*" required
+            <div class="form-group" style="margin-bottom: 1rem;">
+                <label style="display: block; color: rgba(255,255,255,0.7); margin-bottom: 0.5rem;">Image File
+                    (Local)</label>
+                <input type="file" name="image" accept="image/*"
                     style="width: 100%; padding: 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white;">
+            </div>
+            <div style="text-align: center; color: rgba(255,255,255,0.4); margin-bottom: 1rem; font-size: 0.8rem;">— OR
+                —</div>
+            <div class="form-group" style="margin-bottom: 2rem;">
+                <label style="display: block; color: rgba(255,255,255,0.7); margin-bottom: 0.5rem;">Image URL
+                    (Remote)</label>
+                <input type="url" name="imageUrl" placeholder="https://example.com/image.jpg"
+                    style="width: 100%; padding: 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white;">
+                <small style="color: rgba(255,255,255,0.3); font-size: 0.7rem;">Recommended for Vercel/Glitch</small>
             </div>
             <div style="display: flex; gap: 1rem;">
                 <button type="submit" class="submit-btn" style="flex: 1; margin-top: 0;">Upload</button>
