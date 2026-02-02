@@ -100,11 +100,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const vaultSubmit = document.getElementById('vault-submit');
     const modalClose = document.getElementById('modal-close');
 
-    // Direct Access Protection
-    if (window.location.pathname === '/downloads') {
-        if (!localStorage.getItem('vault_unlocked')) {
-            window.location.href = '/';
-        }
+    // Auto-open modal if on protected route
+    if (window.location.pathname === '/protected' && vaultModal) {
+        vaultModal.classList.add('active');
+        setTimeout(() => vaultInput.focus(), 500);
+        // Ensure home sections are visible
+        document.body.classList.add('gallery-open');
+        if (entrance) entrance.style.display = 'none';
+        if (navbar) navbar.style.opacity = '1';
     }
 
     if (protectedLink && vaultModal) {
@@ -134,11 +137,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.cookie = "vault_unlocked=true; path=/; max-age=3600"; // 1 hour session
 
                 setTimeout(() => {
+                    // Redirect to the originally intended page if possible, otherwise /downloads
                     window.location.href = '/downloads';
                 }, 1000);
             } else {
                 vaultInput.classList.add('input-error');
-                setTimeout(() => vaultInput.classList.remove('input-error'), 500);
+                setTimeout(() => {
+                    vaultInput.classList.remove('input-error');
+                    vaultSubmit.textContent = 'Decrypt';
+                    vaultSubmit.style.background = '';
+                }, 500);
             }
         });
 
