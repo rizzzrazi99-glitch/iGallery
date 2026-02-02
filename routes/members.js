@@ -35,39 +35,49 @@ router.get('/register', (req, res) => {
 });
 
 // POST register a new member
-router.post('/register', upload.single('image'), async (req, res) => {
-    try {
-        const { name, username, email, age, profession, place, bio } = req.body;
-        const image = req.file ? '/uploads/' + req.file.filename : null;
-
-        const newMember = new Member({
-            name,
-            username,
-            email,
-            image,
-            age,
-            profession,
-            place,
-            bio
-        });
-        await newMember.save();
-        res.redirect('/members/contributors');
-    } catch (err) {
-        console.error('Registration Error:', err);
-
-        // Handle Vercel / Read-only filesystem error
-        if (err.code === 'EROFS' || err.message.includes('read-only')) {
-            return res.status(500).send('Server Error: This platform does not support local file uploads. Please use a cloud storage provider or contact the administrator.');
+router.post('/register', (req, res) => {
+    upload.single('image')(req, res, async function (err) {
+        // If Multer fails due to read-only filesystem, we can still proceed with text data
+        let imagePath = null;
+        if (err) {
+            console.error('Multer Error (likely EROFS on Vercel):', err.message);
+            // If the error isn't about the filesystem, we might want to return it
+            if (err.code !== 'EROFS' && !err.message.includes('read-only')) {
+                return res.status(500).send('Upload Error: ' + err.message);
+            }
+            // If it IS EROFS, we just log it and proceed without an image
+        } else {
+            imagePath = req.file ? '/uploads/' + req.file.filename : null;
         }
 
-        if (err.name === 'ValidationError') {
-            return res.status(400).send('Validation Error: ' + err.message);
+        try {
+            const { name, username, email, age, profession, place, bio } = req.body;
+
+            const newMember = new Member({
+                name,
+                username,
+                email,
+                image: imagePath,
+                age,
+                profession,
+                place,
+                bio
+            });
+
+            await newMember.save();
+            res.redirect('/members/contributors');
+        } catch (dbErr) {
+            console.error('Registration Error:', dbErr);
+
+            if (dbErr.name === 'ValidationError') {
+                return res.status(400).send('Validation Error: ' + dbErr.message);
+            }
+            if (dbErr.code === 11000) {
+                return res.status(400).send('Error: Username or Email already exists.');
+            }
+            res.status(500).send('Internal Server Error while registering: ' + dbErr.message);
         }
-        if (err.code === 11000) {
-            return res.status(400).send('Error: Username or Email already exists.');
-        }
-        res.status(500).send('Internal Server Error while registering: ' + err.message);
-    }
+    });
 });
 
 // GET contributors page
