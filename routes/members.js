@@ -59,9 +59,6 @@ router.post('/register', (req, res) => {
         }
 
         try {
-            if (mongoose.connection.readyState !== 1) {
-                throw new Error('Database not connected. Please try again in a few seconds.');
-            }
             const { name, username, email, age, profession, place, bio } = req.body;
             console.log('[REGISTRATION] Attempting to save new member:', { username, email });
 

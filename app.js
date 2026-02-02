@@ -7,21 +7,10 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 
+const connectDB = require('./lib/db');
+
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI, {
-  serverSelectionTimeoutMS: 10000, // Wait up to 10s for initial connection
-  socketTimeoutMS: 45000,
-  maxPoolSize: 10, // Maintain up to 10 socket connections
-})
-  .then(() => {
-    console.log('Successfully connected to MongoDB Atlas');
-  })
-  .catch(err => {
-    console.error('CRITICAL: MongoDB connection error!', {
-      message: err.message,
-      code: err.code
-    });
-  });
+connectDB();
 
 // Mongoose connection state logging
 mongoose.connection.on('connected', () => console.log('Mongoose connected to MongoDB Atlas'));
@@ -46,6 +35,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Database connection middleware for Vercel
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    console.error('DB Connection Middleware Error:', err);
+    res.status(500).send('Database connection error');
+  }
+});
 
 // Global vault status middleware
 app.use((req, res, next) => {
