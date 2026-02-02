@@ -1,5 +1,6 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const auth = require('../middleware/auth');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -7,12 +8,8 @@ router.get('/', function (req, res, next) {
 });
 
 /* GET downloads page. */
-router.get('/downloads', function (req, res, next) {
-  if (req.cookies.vault_unlocked === 'true') {
-    res.render('downloads', { title: 'Downloads | iGallery' });
-  } else {
-    res.redirect('/');
-  }
+router.get('/downloads', auth, function (req, res, next) {
+  res.render('downloads', { title: 'Downloads | iGallery' });
 });
 
 /* GET protected page. */
@@ -21,12 +18,8 @@ router.get('/protected', function (req, res, next) {
 });
 
 /* GET OS downloads page. */
-router.get('/downloads/os', function (req, res, next) {
-  if (req.cookies.vault_unlocked === 'true') {
-    res.render('os', { title: 'OS Installer | iGallery' });
-  } else {
-    res.redirect('/');
-  }
+router.get('/downloads/os', auth, function (req, res, next) {
+  res.render('os', { title: 'OS Installer | iGallery' });
 });
 
 module.exports = router;

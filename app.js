@@ -24,6 +24,7 @@ var usersRouter = require('./routes/users');
 var membersRouter = require('./routes/members');
 var adminRouter = require('./routes/admin');
 var galleryRouter = require('./routes/gallery');
+var auth = require('./middleware/auth');
 
 var app = express();
 
@@ -38,10 +39,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/members', membersRouter);
-app.use('/admin', adminRouter);
-app.use('/gallery', galleryRouter);
+app.use('/users', auth, usersRouter);
+app.use('/members', auth, membersRouter);
+app.use('/admin', auth, adminRouter);
+app.use('/gallery', auth, galleryRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
