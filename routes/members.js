@@ -3,11 +3,18 @@ const router = express.Router();
 const Member = require('../models/Member');
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
+
+// Ensure the upload directory exists
+const uploadDir = 'public/uploads/';
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
 
 // Configure Multer Storage
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'public/uploads/');
+        cb(null, uploadDir);
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + path.extname(file.originalname));
@@ -40,8 +47,14 @@ router.post('/register', upload.single('image'), async (req, res) => {
         await newMember.save();
         res.redirect('/members/contributors');
     } catch (err) {
-        console.error(err);
-        res.status(500).send('Error registering member. Username or Email might already exist.');
+        console.error('Registration Error:', err);
+        if (err.name === 'ValidationError') {
+            return res.status(400).send('Validation Error: ' + err.message);
+        }
+        if (err.code === 11000) {
+            return res.status(400).send('Error: Username or Email already exists.');
+        }
+        res.status(500).send('Internal Server Error while registering. Please try again.');
     }
 });
 

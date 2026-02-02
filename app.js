@@ -8,8 +8,16 @@ var mongoose = require('mongoose');
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('MongoDB connected...'))
-  .catch(err => console.error('MongoDB connection error:', err));
+  .then(() => {
+    console.log('Successfully connected to MongoDB Atlas');
+  })
+  .catch(err => {
+    console.error('CRITICAL: MongoDB connection error!', {
+      message: err.message,
+      code: err.code,
+      stack: err.stack
+    });
+  });
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
