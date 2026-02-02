@@ -6,7 +6,7 @@ const path = require('path');
 const fs = require('fs');
 
 // Ensure the user images directory exists
-const uploadDir = 'public/user-images/';
+const uploadDir = 'public/images/';
 if (!fs.existsSync(uploadDir)) {
     try {
         fs.mkdirSync(uploadDir, { recursive: true });
@@ -49,7 +49,7 @@ router.post('/register', (req, res) => {
             // If it IS EROFS, we just log it and proceed without an image
         } else {
             if (req.file) {
-                imagePath = '/user-images/' + req.file.filename;
+                imagePath = '/images/' + req.file.filename;
                 console.log('[REGISTRATION] Image uploaded to:', imagePath);
             } else {
                 console.log('[REGISTRATION] No image file provided.');

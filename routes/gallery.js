@@ -6,7 +6,7 @@ const path = require('path');
 const fs = require('fs');
 
 // Ensure the gallery upload directory exists
-const galleryUploadDir = 'public/gallery-images/';
+const galleryUploadDir = 'public/images/';
 if (!fs.existsSync(galleryUploadDir)) {
     fs.mkdirSync(galleryUploadDir, { recursive: true });
 }
@@ -54,7 +54,7 @@ router.post('/upload', (req, res) => {
             const newItem = new GalleryItem({
                 title,
                 description,
-                image: '/gallery-images/' + req.file.filename
+                image: '/images/' + req.file.filename
             });
 
             await newItem.save();
