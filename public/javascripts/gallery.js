@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
     revealElements.forEach(el => revealObserver.observe(el));
 
     // Protected Card Interaction (Password Vault)
-    const protectedLink = document.querySelector('.protected-link');
+    const protectedLinks = document.querySelectorAll('.protected-link');
     const vaultModal = document.getElementById('vault-modal');
     const vaultInput = document.getElementById('vault-password');
     const vaultSubmit = document.getElementById('vault-submit');
@@ -110,11 +110,20 @@ document.addEventListener('DOMContentLoaded', () => {
         if (navbar) navbar.style.opacity = '1';
     }
 
-    if (protectedLink && vaultModal) {
-        protectedLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            vaultModal.classList.add('active');
-            setTimeout(() => vaultInput.focus(), 500);
+    if (protectedLinks.length > 0 && vaultModal) {
+        protectedLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                // If it's a real link, save it as the destination
+                const targetUrl = link.getAttribute('href');
+                if (targetUrl && targetUrl !== '#' && targetUrl !== '/downloads') {
+                    const currentUrl = new URL(window.location.href);
+                    currentUrl.searchParams.set('r', targetUrl);
+                    window.history.replaceState({}, '', currentUrl);
+                }
+                vaultModal.classList.add('active');
+                setTimeout(() => vaultInput.focus(), 500);
+            });
         });
 
         const closeVault = () => {
@@ -138,14 +147,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 setTimeout(() => {
                     // Redirect to the originally intended page if possible, otherwise /downloads
-                    window.location.href = '/downloads';
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const finalTarget = urlParams.get('r') || '/downloads';
+                    console.log('Unlocking iGallery. Redirecting to:', finalTarget);
+                    window.location.href = finalTarget;
                 }, 1000);
             } else {
+                console.error('Invalid decryption key');
                 vaultInput.classList.add('input-error');
                 setTimeout(() => {
                     vaultInput.classList.remove('input-error');
                     vaultSubmit.textContent = 'Decrypt';
                     vaultSubmit.style.background = '';
+                    vaultSubmit.disabled = false;
                 }, 500);
             }
         });
