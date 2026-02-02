@@ -4,6 +4,7 @@ const GalleryItem = require('../models/GalleryItem');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const mongoose = require('mongoose');
 
 // Ensure the gallery upload directory exists
 const galleryUploadDir = 'public/gallery-images/';
@@ -55,6 +56,9 @@ router.post('/upload', (req, res) => {
         }
 
         try {
+            if (mongoose.connection.readyState !== 1) {
+                throw new Error('Database not connected. Please try again in a few seconds.');
+            }
             const { title, description } = req.body;
             if (!req.file) {
                 return res.status(400).send('Please upload an image');

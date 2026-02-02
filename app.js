@@ -23,8 +23,10 @@ mongoose.connect(process.env.MONGO_URI, {
     });
   });
 
-// Disable buffering to fail fast if connection is down
-mongoose.set('bufferCommands', false);
+// Mongoose connection state logging
+mongoose.connection.on('connected', () => console.log('Mongoose connected to MongoDB Atlas'));
+mongoose.connection.on('error', (err) => console.error('Mongoose connection error:', err));
+mongoose.connection.on('disconnected', () => console.log('Mongoose disconnected'));
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');

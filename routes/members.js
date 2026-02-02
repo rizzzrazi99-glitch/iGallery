@@ -4,6 +4,7 @@ const Member = require('../models/Member');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const mongoose = require('mongoose');
 
 // Ensure the user images directory exists
 const uploadDir = 'public/user-images/';
@@ -58,6 +59,9 @@ router.post('/register', (req, res) => {
         }
 
         try {
+            if (mongoose.connection.readyState !== 1) {
+                throw new Error('Database not connected. Please try again in a few seconds.');
+            }
             const { name, username, email, age, profession, place, bio } = req.body;
             console.log('[REGISTRATION] Attempting to save new member:', { username, email });
 
