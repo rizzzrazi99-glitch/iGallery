@@ -5,10 +5,16 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// Ensure the upload directory exists
+// Ensure the upload directory exists (Only in development or environments with write access)
 const uploadDir = 'public/uploads/';
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
+if (process.env.NODE_ENV !== 'production') {
+    if (!fs.existsSync(uploadDir)) {
+        try {
+            fs.mkdirSync(uploadDir, { recursive: true });
+        } catch (err) {
+            console.error('Warning: Could not create upload directory:', err.message);
+        }
+    }
 }
 
 // Configure Multer Storage
@@ -48,13 +54,19 @@ router.post('/register', upload.single('image'), async (req, res) => {
         res.redirect('/members/contributors');
     } catch (err) {
         console.error('Registration Error:', err);
+
+        // Handle Vercel / Read-only filesystem error
+        if (err.code === 'EROFS' || err.message.includes('read-only')) {
+            return res.status(500).send('Server Error: This platform does not support local file uploads. Please use a cloud storage provider or contact the administrator.');
+        }
+
         if (err.name === 'ValidationError') {
             return res.status(400).send('Validation Error: ' + err.message);
         }
         if (err.code === 11000) {
             return res.status(400).send('Error: Username or Email already exists.');
         }
-        res.status(500).send('Internal Server Error while registering. Please try again.');
+        res.status(500).send('Internal Server Error while registering: ' + err.message);
     }
 });
 
