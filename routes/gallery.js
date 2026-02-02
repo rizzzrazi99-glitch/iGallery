@@ -42,11 +42,8 @@ router.get('/', async (req, res) => {
 router.post('/upload', (req, res) => {
     upload.single('image')(req, res, async function (err) {
         if (err) {
-            console.error('Gallery Multer Error:', err.message);
-            if (err.code === 'EROFS' || err.message.includes('read-only')) {
-                return res.status(500).send('Server Error: This platform does not support local file uploads. Please contact the administrator.');
-            }
-            return res.status(500).send('Upload Error: ' + err.message);
+            console.error('Gallery Multer Error:', err);
+            return res.status(500).send(`Upload Error (${err.code || 'UNKNOWN'}): ${err.message}`);
         }
 
         try {

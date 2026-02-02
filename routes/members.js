@@ -41,12 +41,8 @@ router.post('/register', (req, res) => {
     upload.single('image')(req, res, async function (err) {
         let imagePath = null;
         if (err) {
-            console.error('[REGISTRATION] Multer Error:', err.message);
-            // If the error isn't about the filesystem, we might want to return it
-            if (err.code !== 'EROFS' && !err.message.includes('read-only')) {
-                return res.status(500).send('Upload Error: ' + err.message);
-            }
-            // If it IS EROFS, we just log it and proceed without an image
+            console.error('[REGISTRATION] Multer Error:', err);
+            return res.status(500).send(`Upload Error (${err.code || 'UNKNOWN'}): ${err.message}`);
         } else {
             if (req.file) {
                 imagePath = '/user-images/' + req.file.filename;
