@@ -3,11 +3,18 @@ const router = express.Router();
 const GalleryItem = require('../models/GalleryItem');
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
+
+// Ensure the gallery upload directory exists
+const galleryUploadDir = 'public/gallery-images/';
+if (!fs.existsSync(galleryUploadDir)) {
+    fs.mkdirSync(galleryUploadDir, { recursive: true });
+}
 
 // Configure Multer Storage for Gallery
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'public/uploads/');
+        cb(null, galleryUploadDir);
     },
     filename: function (req, file, cb) {
         cb(null, 'gallery-' + Date.now() + path.extname(file.originalname));
@@ -47,7 +54,7 @@ router.post('/upload', (req, res) => {
             const newItem = new GalleryItem({
                 title,
                 description,
-                image: '/uploads/' + req.file.filename
+                image: '/gallery-images/' + req.file.filename
             });
 
             await newItem.save();
