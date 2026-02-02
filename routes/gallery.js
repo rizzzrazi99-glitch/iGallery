@@ -39,7 +39,8 @@ router.post('/upload', (req, res) => {
 
         if (err) {
             console.error('Gallery Cloudinary Upload Error:', err);
-            return res.status(500).send(`Upload Error: ${err.message}`);
+            const errorMessage = err.message || JSON.stringify(err) || 'Unknown Error';
+            return res.status(500).send(`Upload Error: ${errorMessage}`);
         }
 
         try {

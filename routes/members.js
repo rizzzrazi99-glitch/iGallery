@@ -36,7 +36,8 @@ router.post('/register', (req, res) => {
 
         if (err) {
             console.error('[REGISTRATION] Cloudinary Upload Error:', err);
-            return res.status(500).send(`Upload Error: ${err.message}`);
+            const errorMessage = err.message || JSON.stringify(err) || 'Unknown Error';
+            return res.status(500).send(`Upload Error: ${errorMessage}`);
         }
 
         if (req.file) {
