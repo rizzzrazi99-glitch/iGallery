@@ -1,5 +1,5 @@
-// iGallery Script v1.0.6 - Final Production Fix
-console.log('Using iGallery v1.0.6');
+// iGallery Script v1.1.0 - Cache Buster Fix
+console.log('Using iGallery v1.1.0');
 
 document.addEventListener('DOMContentLoaded', () => {
     const entrance = document.getElementById('entrance');
