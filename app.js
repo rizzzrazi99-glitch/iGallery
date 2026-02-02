@@ -7,17 +7,22 @@ var logger = require('morgan');
 var mongoose = require('mongoose');
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI, {
+  serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+  socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
+})
   .then(() => {
     console.log('Successfully connected to MongoDB Atlas');
   })
   .catch(err => {
     console.error('CRITICAL: MongoDB connection error!', {
       message: err.message,
-      code: err.code,
-      stack: err.stack
+      code: err.code
     });
   });
+
+// Disable buffering to fail fast if connection is down
+mongoose.set('bufferCommands', false);
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -42,6 +47,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use((req, res, next) => {
   res.locals.isUnlocked = req.cookies && req.cookies.vault_unlocked === 'true';
   next();
+});
+
+// Database status route
+app.get('/db-status', (req, res) => {
+  const status = mongoose.connection.readyState;
+  const states = ['disconnected', 'connected', 'connecting', 'disconnecting'];
+  res.json({
+    status: states[status] || 'unknown',
+    connected: status === 1,
+    host: mongoose.connection.host ? 'Protected' : 'None'
+  });
 });
 
 app.use('/', indexRouter);
