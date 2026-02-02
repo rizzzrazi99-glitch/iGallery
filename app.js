@@ -1,4 +1,9 @@
-console.log('App starting... Version: 1.2.0 (Vercel Fixes)');
+console.log('App starting... Version: 1.3.0 (Cloudinary Integrated)');
+console.log('Cloudinary Config Check:', {
+  hasCloudName: !!process.env.CLOUDINARY_CLOUD_NAME,
+  hasApiKey: !!process.env.CLOUDINARY_API_KEY,
+  hasApiSecret: !!process.env.CLOUDINARY_API_SECRET
+});
 require('dotenv').config();
 var createError = require('http-errors');
 var express = require('express');
