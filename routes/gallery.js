@@ -6,9 +6,13 @@ const path = require('path');
 const fs = require('fs');
 
 // Ensure the gallery upload directory exists
-const galleryUploadDir = 'public/images/';
+const galleryUploadDir = 'public/gallery-images/';
 if (!fs.existsSync(galleryUploadDir)) {
-    fs.mkdirSync(galleryUploadDir, { recursive: true });
+    try {
+        fs.mkdirSync(galleryUploadDir, { recursive: true });
+    } catch (err) {
+        console.error('Gallery directory creation error:', err.message);
+    }
 }
 
 // Configure Multer Storage for Gallery
@@ -54,7 +58,7 @@ router.post('/upload', (req, res) => {
             const newItem = new GalleryItem({
                 title,
                 description,
-                image: '/images/' + req.file.filename
+                image: '/gallery-images/' + req.file.filename
             });
 
             await newItem.save();
