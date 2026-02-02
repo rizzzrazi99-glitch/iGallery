@@ -17,16 +17,8 @@ if (!fs.existsSync(uploadDir)) {
     }
 }
 
-// Configure Multer Storage
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, uploadDir);
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + path.extname(file.originalname));
-    }
-});
-
+// Configure Cloudinary Storage
+const { storage } = require('../lib/cloudinary');
 const upload = multer({ storage: storage });
 
 // GET registration page
@@ -43,18 +35,13 @@ router.post('/register', (req, res) => {
         let imagePath = req.body.imageUrl || null;
 
         if (err) {
-            console.error('[REGISTRATION] Multer Error:', err);
-            // If it's a read-only filesystem (Vercel), log it and proceed without an image
-            if (err.code === 'EROFS' || err.message.includes('read-only')) {
-                console.warn('[REGISTRATION] Target directory is read-only. Using URL if provided.');
-            } else {
-                return res.status(500).send(`Upload Error (${err.code || 'UNKNOWN'}): ${err.message}`);
-            }
-        } else {
-            if (req.file) {
-                imagePath = '/user-images/' + req.file.filename;
-                console.log('[REGISTRATION] Image uploaded to:', imagePath);
-            }
+            console.error('[REGISTRATION] Cloudinary Upload Error:', err);
+            return res.status(500).send(`Upload Error: ${err.message}`);
+        }
+
+        if (req.file) {
+            imagePath = req.file.path; // Cloudinary returns the full URL in .path
+            console.log('[REGISTRATION] Image uploaded to Cloudinary:', imagePath);
         }
 
         try {

@@ -16,16 +16,8 @@ if (!fs.existsSync(galleryUploadDir)) {
     }
 }
 
-// Configure Multer Storage for Gallery
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, galleryUploadDir);
-    },
-    filename: function (req, file, cb) {
-        cb(null, 'gallery-' + Date.now() + path.extname(file.originalname));
-    }
-});
-
+// Configure Cloudinary Storage
+const { storage } = require('../lib/cloudinary');
 const upload = multer({ storage: storage });
 
 // GET gallery page
@@ -46,24 +38,16 @@ router.post('/upload', (req, res) => {
         let imagePath = req.body.imageUrl || null;
 
         if (err) {
-            console.error('Gallery Multer Error:', err);
-            // Gracefully handle read-only filesystem on Vercel
-            if (err.code === 'EROFS' || err.message.includes('read-only')) {
-                console.warn('Gallery directory is read-only. Using URL if provided.');
-                if (!imagePath) {
-                    return res.status(400).send('Upload Error: This platform does not support local storage. Please provide an **Image URL** instead.');
-                }
-            } else {
-                return res.status(500).send(`Upload Error (${err.code || 'UNKNOWN'}): ${err.message}`);
-            }
+            console.error('Gallery Cloudinary Upload Error:', err);
+            return res.status(500).send(`Upload Error: ${err.message}`);
         }
 
         try {
             const { title, description } = req.body;
 
-            // If multer succeeded and we have a file, override imagePath
+            // If multer succeeded and we have a file, use the Cloudinary URL
             if (req.file) {
-                imagePath = '/gallery-images/' + req.file.filename;
+                imagePath = req.file.path;
             }
 
             if (!imagePath) {
@@ -73,7 +57,7 @@ router.post('/upload', (req, res) => {
             const newItem = new GalleryItem({
                 title,
                 description,
-                image: '/gallery-images/' + req.file.filename
+                image: imagePath
             });
 
             await newItem.save();
