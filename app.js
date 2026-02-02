@@ -1,3 +1,4 @@
+console.log('App starting... Version: 1.2.0 (Vercel Fixes)');
 require('dotenv').config();
 var createError = require('http-errors');
 var express = require('express');
