@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Set unlock flag
                 localStorage.setItem('vault_unlocked', 'true');
-                document.cookie = "vault_unlocked=true; path=/; max-age=3600"; // 1 hour session
+                document.cookie = "vault_unlocked=true; path=/; max-age=3600; SameSite=Lax"; // 1 hour session
 
                 setTimeout(() => {
                     // Redirect to the originally intended page if possible, otherwise /downloads

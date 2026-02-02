@@ -9,6 +9,7 @@ const OS_DATA = {
         architectures: {
             '64bit': { label: '64-bit', note: 'RECOMMENDED', download: 'https://cdimage.kali.org/kali-2025.4/kali-linux-2025.4-installer-amd64.iso' },
             'VMBox': { label: 'VMBox', note: 'Legacy (2023.4)', download: 'https://cdimage.kali.org/kali-2025.4/kali-linux-2025.4-virtualbox-amd64.7z' },
+            'Edition': { label: 'Edition', note: 'Legacy (2023.4)', download: 'https://cdimage.kali.org/kali-2025.4/kali-linux-2025.4-virtualbox-amd64.7z' },
             'arm64': { label: 'Apple Silicon', note: 'M1/M2/M3', download: 'https://cdimage.kali.org/kali-2025.4/kali-linux-2025.4-installer-arm64.iso' }
         }
     },
