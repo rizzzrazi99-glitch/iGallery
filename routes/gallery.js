@@ -40,6 +40,7 @@ router.get('/', async (req, res) => {
 
 // POST upload gallery item
 router.post('/upload', (req, res) => {
+    // Attempting to upload image and diagnostic logging enabled
     upload.single('image')(req, res, async function (err) {
         if (err) {
             console.error('Gallery Multer Error:', err);
