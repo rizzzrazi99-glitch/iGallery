@@ -5,15 +5,13 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// Ensure the upload directory exists (Only in development or environments with write access)
-const uploadDir = 'public/uploads/';
-if (process.env.NODE_ENV !== 'production') {
-    if (!fs.existsSync(uploadDir)) {
-        try {
-            fs.mkdirSync(uploadDir, { recursive: true });
-        } catch (err) {
-            console.error('Warning: Could not create upload directory:', err.message);
-        }
+// Ensure the user images directory exists
+const uploadDir = 'public/user-images/';
+if (!fs.existsSync(uploadDir)) {
+    try {
+        fs.mkdirSync(uploadDir, { recursive: true });
+    } catch (err) {
+        console.error('Warning: Could not create user images directory:', err.message);
     }
 }
 
@@ -47,7 +45,7 @@ router.post('/register', (req, res) => {
             }
             // If it IS EROFS, we just log it and proceed without an image
         } else {
-            imagePath = req.file ? '/uploads/' + req.file.filename : null;
+            imagePath = req.file ? '/user-images/' + req.file.filename : null;
         }
 
         try {
