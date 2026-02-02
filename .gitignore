@@ -11,6 +11,8 @@ build/
 dist/
 
 # Env
+.env
+.env.local
 
 .env.local
 .env.development.local
