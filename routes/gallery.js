@@ -44,6 +44,13 @@ router.post('/upload', (req, res) => {
     upload.single('image')(req, res, async function (err) {
         if (err) {
             console.error('Gallery Multer Error:', err);
+            // Gracefully handle read-only filesystem on Vercel
+            if (err.code === 'EROFS' || err.message.includes('read-only')) {
+                console.warn('Gallery directory is read-only. Upload failed but proceeding with log.');
+                // For gallery, we really NEED an image, but we shouldn't crash.
+                // We'll return a 400 instead of 500 with a clear message.
+                return res.status(400).send('Upload Error: This platform does not support local storage. Please use a cloud-hosted image URL or contact site admin.');
+            }
             return res.status(500).send(`Upload Error (${err.code || 'UNKNOWN'}): ${err.message}`);
         }
 

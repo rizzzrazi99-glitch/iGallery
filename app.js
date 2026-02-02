@@ -8,8 +8,9 @@ var mongoose = require('mongoose');
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {
-  serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
-  socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
+  serverSelectionTimeoutMS: 10000, // Wait up to 10s for initial connection
+  socketTimeoutMS: 45000,
+  maxPoolSize: 10, // Maintain up to 10 socket connections
 })
   .then(() => {
     console.log('Successfully connected to MongoDB Atlas');

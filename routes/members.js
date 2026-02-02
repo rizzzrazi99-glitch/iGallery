@@ -42,7 +42,12 @@ router.post('/register', (req, res) => {
         let imagePath = null;
         if (err) {
             console.error('[REGISTRATION] Multer Error:', err);
-            return res.status(500).send(`Upload Error (${err.code || 'UNKNOWN'}): ${err.message}`);
+            // If it's a read-only filesystem (Vercel), log it and proceed without an image
+            if (err.code === 'EROFS' || err.message.includes('read-only')) {
+                console.warn('[REGISTRATION] Target directory is read-only. Proceeding without image.');
+            } else {
+                return res.status(500).send(`Upload Error (${err.code || 'UNKNOWN'}): ${err.message}`);
+            }
         } else {
             if (req.file) {
                 imagePath = '/user-images/' + req.file.filename;
