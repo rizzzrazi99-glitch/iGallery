@@ -1,3 +1,4 @@
+// iGallery Script v1.0.5 - Deployment Fix
 document.addEventListener('DOMContentLoaded', () => {
     const entrance = document.getElementById('entrance');
     const entranceBtn = document.querySelector('.entrance-btn');
