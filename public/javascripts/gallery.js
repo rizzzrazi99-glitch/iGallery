@@ -1,4 +1,6 @@
-// iGallery Script v1.0.5 - Deployment Fix
+// iGallery Script v1.0.6 - Final Production Fix
+console.log('Using iGallery v1.0.6');
+
 document.addEventListener('DOMContentLoaded', () => {
     const entrance = document.getElementById('entrance');
     const entranceBtn = document.querySelector('.entrance-btn');
@@ -141,6 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (password === 'igallery2026') {
                 vaultSubmit.textContent = 'DECRYPTING...';
                 vaultSubmit.style.background = '#10b981';
+                vaultSubmit.disabled = true;
 
                 // Set unlock flag
                 localStorage.setItem('vault_unlocked', 'true');

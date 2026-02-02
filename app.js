@@ -35,8 +35,13 @@ app.set('view engine', 'hbs');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Global vault status middleware
+app.use((req, res, next) => {
+  res.locals.isUnlocked = req.cookies && req.cookies.vault_unlocked === 'true';
+  next();
+});
 
 app.use('/', indexRouter);
 app.use('/users', auth, usersRouter);
