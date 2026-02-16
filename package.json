@@ -7,7 +7,7 @@
     "check": "node ./bin/www --check"
   },
   "dependencies": {
-    "cloudinary": "^1.41.3",
+    "cloudinary": "^2.9.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "dotenv": "^17.2.3",
@@ -17,7 +17,7 @@
     "mongoose": "^9.1.5",
     "morgan": "^1.10.1",
     "multer": "^2.0.2",
-    "multer-storage-cloudinary": "^4.0.0",
+    "multer-storage-cloudinary": "^2.2.1",
     "nodemon": "^3.1.11"
   }
 }
